@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://lskalkos.github.io/blog/2015/06/09/zen-and-the-art-of-programming/</loc>
+    <lastmod>2015-06-09T17:21:57-04:00</lastmod>
+  </url>
+  <url>
     <loc>http://lskalkos.github.io/blog/2015/06/02/my-first-post-on-octopress/</loc>
     <lastmod>2015-06-02T15:19:27-04:00</lastmod>
   </url>
