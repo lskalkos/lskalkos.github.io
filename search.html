@@ -3,10 +3,10 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Blog Archives - Lia.Skalkos</title>
+	<title>Lia.Skalkos</title>
     <meta name="author" content="Lia Skalkos">
     
-	<meta name="description" content=" 2015 Zen and the Art of Programming Jun 9 ">
+	<meta name="description" content="Search Results ">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -78,24 +78,21 @@
 <div id="toload">
 <!-- begin toload --> 
     <div id="content" class="inner">
-        
-	
+        <h1 class="entry-title"><center>Search Results</center></h1>
+<div id="search_loading" style="margin: 40px 0">
+    <center><img src="/images/loading.gif"></center>
+</div>
 
-
-	
-	
-	<section class="archives"><h1 class="year">2015</h1>
-
-<article>
-  <h2 class="title"><a href="/blog/2015/06/09/zen-and-the-art-of-programming/">Zen and the Art of Programming</a></h2>
-	<div class="meta">
-		<span class="date">Jun  9</span>
-		<span class="tags">
-
-</span>
-	    
-	</div>
-</article>
+<script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+<div id="search_results" style="display:none">
+<br>
+</div>
+<script>
+         $('#search_results').tapir({
+             'token': '',
+             'complete' : function() { document.getElementById('search_loading').style.display="none"; }
+         });
+</script>
 
 
     </div>
