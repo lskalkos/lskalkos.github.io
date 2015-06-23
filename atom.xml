@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-06-19T15:49:14-04:00</updated>
+  <updated>2015-06-22T20:08:59-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -12,6 +12,56 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Efficient Coding With Rubymine:<br />a Quick Guide]]></title>
+    <link href="http://lskalkos.github.io/blog/2015/06/20/efficient-coding-with-rubymine/"/>
+    <updated>2015-06-20T11:04:32-04:00</updated>
+    <id>http://lskalkos.github.io/blog/2015/06/20/efficient-coding-with-rubymine</id>
+    <content type="html"><![CDATA[<p>Programmers tend to be a crew that likes their tools. From your OS, to version control, to bash and Ruby itself, one could argue that pretty much every aspect of programming involves a tool. Usually, the linchpin of all these tools is the text editor, the place where the code actually gets written. Recently, instead of using Sublime Text, I&rsquo;ve been using an <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a> called Rubymine. While I&rsquo;m a fan of Sublime Text, I&rsquo;ve been finding that Rubymine provides some advantages that give me a boost in efficiency. In this post I give a quick review of some of Rubymine&rsquo;s features.</p>
+
+<h3>Debugging</h3>
+
+
+<p>Rubymine comes with a built in visual debugger that can function as an alternative to debugging with pry. Let&rsquo;s take a look at how this works.</p>
+
+<p>Navigate over to the rspec test you want to run (or the file that serves as your program&rsquo;s entry point), right click, and select debug (or Option + Shift + D). You can also select a specific test to run within a spec. If there are no bugs, your test will pass and your program will run. When you debug, three tabs will open up at the bottom: the Debugger, Console, and Interactive Console. The Console reports the output of your test, and will alert you if there are any errors. Let&rsquo;s say you run a test and you hit an error. Here are the steps you can take to take advantage of Rubymine&rsquo;s debugging capabilities:</p>
+
+<ol>
+<li><p>Head over to the line in your program where Ruby ran into a problem.</p></li>
+<li><p>Set a &ldquo;breakpoint&rdquo; &ndash; this is very similar to setting a binding.pry. The next time your program runs Rubymine will stop it at this point. Use Command + fn + F8 to set a breakpoint. You can set several of these at a time. <img src="images/rubymine_breakpoint.png" style="display: block; margin: 20px auto 20px;"/></p></li>
+<li><p>Rerun your debugger (Option + Shift + D).</p></li>
+<li><p>Now, when you check the debugger tab you&rsquo;ll be shown the current values of the local variables within the scope of your breakpoint <em>and</em> Rubymine will write out these values in your actual code. You can also get access to an Expression Evaluator and can set a watch or a condition on variables or expresssions to see how they change as you move through your code. <img src="images/rubymine_local_variables.png" style="displauy: block; margin: 20px auto 20px;"/></p></li>
+<li><p>Head over to the Interactive Console for an IRB that gives you access to these variables.</p></li>
+<li><p>Once you&rsquo;ve corrected your code, hit &lsquo;Rerun&rsquo; to rerun your test.</p></li>
+</ol>
+
+
+<p>This might not sound like it&rsquo;s that different from using pry, but when you&rsquo;re debugging, getting visual cues and having all of the information in one place without having to run multiple commands and switch between panels seems invaluable.</p>
+
+<h3>Syntax Highlighting & Auto Suggestion</h3>
+
+
+<p>Rubymine remembers your classes and their methods no matter where you are in your program, so when you reference a class or create a new instance it provides a list of method suggestions. Pretty helpful when you&rsquo;re trying to remember a method. Also, unlike Sublime Text, it provides code completion and signals you when you have a syntax error or have misused a local variable. No more having to type &ldquo;end&rdquo; to a if block.</p>
+
+<p><img src="images/rubymine_autosuggest.png" style="display: block; margin: 20px auto 20px;"/></p>
+
+<h3>Terminal</h3>
+
+
+<p></p>
+
+<p>You can run bash directly from Rubymine. Need I say more? No more need to shift + tab back and forth from terminal.</p>
+
+<p>The Verdict?</p>
+
+<p>Rubymine seems to be super powerful. It has other features which I haven&rsquo;t begun to explore, like other language and refactoring support. It&rsquo;s keyboard-centric, which means it&rsquo;s meant to be handled through keyboard commands as much as possible. Of course, having to learn a bunch of keyboard commands can be time-consuming and an extra stress when you&rsquo;re already trying to learn something new. But, once you have a good number down, they save you a lot of time. Rubymine definitely takes more time to learn than Sublime Text, and can be a learning project all on its own. There are a ton of features, which can seem overwhelming and like a distraction from the actual task: coding. Also, at $99 for an individual license, it&rsquo;s not cheap. But an upfront investment of time and money seems very likely to payoff in terms of efficiency and support.</p>
+
+<p>Some purists might argue that they like sparse tools like Vim better because they can code right from the command line. In my view, why not use a tool that can provide you more context immediately? When you&rsquo;re doing something as cognitively involved as coding, it helps to have all the signaling you can get.</p>
+
+<p>In the end, there is no &ldquo;best&rdquo; text editor or environment set up &ndash; it&rsquo;s a matter of individual taste and circumstance and what you feel supports you best in your workflow. As long as a tool is empowering you, it&rsquo;s worthwhile. I&rsquo;m still getting to know Rubymine, but for now, I&rsquo;m enjoying it.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Zen and the Art of Programming]]></title>
