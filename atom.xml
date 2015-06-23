@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-06-22T20:08:59-04:00</updated>
+  <updated>2015-06-22T20:12:01-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -18,7 +18,7 @@
     <link href="http://lskalkos.github.io/blog/2015/06/20/efficient-coding-with-rubymine/"/>
     <updated>2015-06-20T11:04:32-04:00</updated>
     <id>http://lskalkos.github.io/blog/2015/06/20/efficient-coding-with-rubymine</id>
-    <content type="html"><![CDATA[<p>Programmers tend to be a crew that likes their tools. From your OS, to version control, to bash and Ruby itself, one could argue that pretty much every aspect of programming involves a tool. Usually, the linchpin of all these tools is the text editor, the place where the code actually gets written. Recently, instead of using Sublime Text, I&rsquo;ve been using an <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a> called Rubymine. While I&rsquo;m a fan of Sublime Text, I&rsquo;ve been finding that Rubymine provides some advantages that give me a boost in efficiency. In this post I give a quick review of some of Rubymine&rsquo;s features.</p>
+    <content type="html"><![CDATA[<p>Programmers tend to be a crew that likes their tools. From the OS, to version control, to bash and Ruby itself, one could argue that pretty much every aspect of programming involves a tool. Usually, the linchpin of all these tools is the text editor, the place where the code actually gets written. Recently, instead of using Sublime Text, I&rsquo;ve been using an <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a> called Rubymine. While I&rsquo;m a fan of Sublime Text, I&rsquo;ve been finding that Rubymine provides some advantages that give me a boost in efficiency. In this post I give a quick review of some of Rubymine&rsquo;s features.</p>
 
 <h3>Debugging</h3>
 
