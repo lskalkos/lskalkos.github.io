@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Minority Report:<br />Ruby Exceptions & Errors - Lia.Skalkos</title>
+  <meta name="author" content="Lia Skalkos">
+
+  
+  <meta name="description" content="Not too long ago in one of our labs at Flatiron, we were asked to write some code that made this test pass: it &ldquo;should raise an error for &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+  
+  <link rel="canonical" href="http://lskalkos.github.io/blog/2015/06/28/minority-report-exception-handling-in-ruby">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Lia.Skalkos" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+	<header class="band" data-0="background-position:0px 0px;" data-500="background-position:0px -250px;">
+		<div class="container">
+			<div class="columns sixteen" data-0="opacity: 1" data-180="opacity: 0">
+        <hgroup>
+  <h1><a href="/">Lia.Skalkos</a></h1>
+  
+    <h2>Life in code.</h2>
+  
+</hgroup>
+
+
+        <ul class="main-navigation">
+  <li><a class='button' href="http://linkedin.com/lskalkos">Linkedin</a></li>
+  <li><a class='button' href="http://github.com/lskalkos">Github</a></li>
+  <li><a class='button' href="http://liaskalkos.net">About</a></li>
+</ul>
+
+
+			</div>
+		</div>
+	</header>
+
+	<div class="band main">
+		<div class="container">
+			<div class="columns twelve offset-by-two">
+        <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Minority Report:<br />Ruby Exceptions & Errors</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-06-28T16:25:01-04:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Not too long ago in one of our labs at Flatiron, we were asked to write some code that made this test pass:<br><br>
+<code>
+  it &ldquo;should raise an error for invalid types&rdquo; do
+  expect { RPSGame.new(:dynamite) }.to raise_error(RPSGame::PlayTypeError)
+  end<br/>
+</code></p>
+
+<p>After puzzling over this for a little, and reading some documentation, I got the test to pass by writing the following code:</p>
+
+<p><code>
+  class RPSGame
+    attr_reader :type</p>
+
+<pre><code>class PlayTypeError &lt; StandardError
+end
+
+def self.valid_types
+  @@valid_types = [:rock, :paper, :scissors]
+end
+
+def initialize(type)
+  @type = type
+  raise(PlayTypeError.new) if !self.class.valid_types.include?(@type)
+end
+</code></pre>
+
+<p>  end<br/>
+</code></p>
+
+<p>What was this neat little piece of code doing? Basically, raising an error if the user tried to enter an invalid action. I thought it was interesting, but soon moved on to other parts of the lab. However, I never forgot about the interesting little piece of code I had encountered. Ruby still feel inherently different to me than other parts of the language. They seem to be a little exotic, like rare birds in forest full of, I don&rsquo;t know, carrier pigeons. I guess this feeling makes sense, since exceptions tend to only come into play when things in our program go wrong. Also, there are a couple of special methods associated with them that not every class of object has. So, with that little intro here are a few things that are helpful in understanding exceptions:</p>
+
+<ol>
+  <li>
+    <strong>First and foremost, exceptions are Ruby objects.</strong>
+    <p>Like nearly everything in Ruby, exceptions are objects. This is great in that they can contain information about themselves, and can have a real presence within our programs. They can be passed around and instantiated whenever necessary.</p>
+  </li>
+  <li>
+    <strong>Exceptions are for exceptional circumstances.</strong>
+    <p>You probably don't want to use an exception in place of a well thought-out program and appropriate logic constraints. Say, in an application that already has built-in form/params logic, trying to guide the user towards a different input type. Instead, you probably want to make use of exceptions where it's reasonable that an unlikely but highly detrimental situation to your program could occur. It's nice here to spend some time thinking about what kind of tool exceptions are and where they would work best.</p>
+    <p>Imagine we have an app that uses a 3rd party API. What happens if the connection times out, or the 3rd party's server is down, or for whatever other reason, their DNS isn't working? It's unlikely to happen, but because our application has this dependency, it's reasonable to have a contingency plan. This use case is a good example of where exceptions make a good fit. </p>
+  </li>
+  <li>
+    <strong>Exceptions can be raised.</strong>
+    <p>
+      The raise method is from the Kernel module. By default, raise will create an exception of the RuntimeError class. To raise an exception of a specific class, you can pass in the class name as an argument.<br><br>
+      <code>
+        raise "Here is a regular RuntimeError"<br>
+        raise StandardError.new("Here is a StandardError")
+      </code>
+    </p>
+  </li>
+  <li>
+    <strong>When an exception is raised, it halts the program.</strong>
+    <p>
+      As a Ruby programmer, you encounter this on a day-to-day basis. Here's an example:<br>
+      <code>
+        "10" + 3<br>
+        TypeError: no implicit conversion of Fixnum into String
+      </code>
+      There's no way to continue from here. Basically, this is where our program has ended up.
+    </p>
+  </li>
+  <li>
+    <strong>Exceptions are associated with begin/rescue blocks.</strong>
+    <p>Begin/rescue blocks function a lot like if statements, in that if an exception is thrown in the "begin" part, you can rescue from it and essentially branch your program. Unlike an if statement, however, they can be a little more granular about what type of exception to rescue from.
+      <div><script src='https://gist.github.com/28839b613ab07b5494db.js?file=gistfile1.rb'></script>
+<noscript><pre><code>a = 7
+b = &quot;10&quot;
+
+begin
+   a + b #executes the expression
+rescue
+   puts &quot;Could not add variables a (#{a.class}) and b (#{b.class})&quot; #if an an exception is raised, this part will fire
+else
+   puts &quot;a + b is #{a + b}&quot; #otherwise, this part will fire 
+end</code></pre></noscript></div>
+</p>
+  </li>
+  <li>
+    <strong>Exceptions have methods.</strong>
+    <p>This ties into #1. They basically are backtrace, message, and inspect.</p>
+  </li>
+  <li>
+    <strong>Make sure you specify the Exception type you are rescuing from.</strong>
+    <p>Probably the most important point for last. Errors inherit from the class Exception. Exception has a big family tree. When you rescue from an Exception, be sure to be as specific as possible about the type, so that you don't accidentally rescue from an exception you weren't anticipating.</p>
+  </li>
+</ol>
+
+
+<p>Sources:<br>
+<a href="http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/"><a href="http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/</a></a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+
+
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/06/28/minority-report-exception-handling-in-ruby/">Minority Report:<br />Ruby Exceptions & Errors</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/20/efficient-coding-with-rubymine/">Efficient Coding With Rubymine:<br />a Quick Guide</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/09/zen-and-the-art-of-programming/">Zen and the Art of Programming</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+			</div>
+		</div>
+	</div>
+
+	<footer class="band main">
+		<div class="container">
+			<div class="columns sixteen">
+        <div id='footer_content'>
+  <ul>
+    <li>Copyright &copy; 2015 - Lia Skalkos</li>
+    <li>Powered by <a href="http://octopress.org">Octopress</a></li>
+  </ul>
+</div>
+
+
+        
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+			</div>
+		</div>
+	</footer>
+
+	<script type="text/javascript" src="/javascripts/skrollr.js"></script>
+	<script type="text/javascript">
+	skrollr.init({
+		forceHeight: false
+	});
+	</script>
+</script>
+</body>
+

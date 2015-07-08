@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-06-22T20:12:01-04:00</updated>
+  <updated>2015-07-07T21:31:49-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -12,6 +12,105 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Minority Report:<br />Ruby Exceptions & Errors]]></title>
+    <link href="http://lskalkos.github.io/blog/2015/06/28/minority-report-exception-handling-in-ruby/"/>
+    <updated>2015-06-28T16:25:01-04:00</updated>
+    <id>http://lskalkos.github.io/blog/2015/06/28/minority-report-exception-handling-in-ruby</id>
+    <content type="html"><![CDATA[<p>Not too long ago in one of our labs at Flatiron, we were asked to write some code that made this test pass:<br><br>
+<code>
+  it &ldquo;should raise an error for invalid types&rdquo; do
+  expect { RPSGame.new(:dynamite) }.to raise_error(RPSGame::PlayTypeError)
+  end<br/>
+</code></p>
+
+<p>After puzzling over this for a little, and reading some documentation, I got the test to pass by writing the following code:</p>
+
+<p><code>
+  class RPSGame
+    attr_reader :type</p>
+
+<pre><code>class PlayTypeError &lt; StandardError
+end
+
+def self.valid_types
+  @@valid_types = [:rock, :paper, :scissors]
+end
+
+def initialize(type)
+  @type = type
+  raise(PlayTypeError.new) if !self.class.valid_types.include?(@type)
+end
+</code></pre>
+
+<p>  end<br/>
+</code></p>
+
+<p>What was this neat little piece of code doing? Basically, raising an error if the user tried to enter an invalid action. I thought it was interesting, but soon moved on to other parts of the lab. However, I never forgot about the interesting little piece of code I had encountered. Ruby still feel inherently different to me than other parts of the language. They seem to be a little exotic, like rare birds in forest full of, I don&rsquo;t know, carrier pigeons. I guess this feeling makes sense, since exceptions tend to only come into play when things in our program go wrong. Also, there are a couple of special methods associated with them that not every class of object has. So, with that little intro here are a few things that are helpful in understanding exceptions:</p>
+
+<ol>
+  <li>
+    <strong>First and foremost, exceptions are Ruby objects.</strong>
+    <p>Like nearly everything in Ruby, exceptions are objects. This is great in that they can contain information about themselves, and can have a real presence within our programs. They can be passed around and instantiated whenever necessary.</p>
+  </li>
+  <li>
+    <strong>Exceptions are for exceptional circumstances.</strong>
+    <p>You probably don't want to use an exception in place of a well thought-out program and appropriate logic constraints. Say, in an application that already has built-in form/params logic, trying to guide the user towards a different input type. Instead, you probably want to make use of exceptions where it's reasonable that an unlikely but highly detrimental situation to your program could occur. It's nice here to spend some time thinking about what kind of tool exceptions are and where they would work best.</p>
+    <p>Imagine we have an app that uses a 3rd party API. What happens if the connection times out, or the 3rd party's server is down, or for whatever other reason, their DNS isn't working? It's unlikely to happen, but because our application has this dependency, it's reasonable to have a contingency plan. This use case is a good example of where exceptions make a good fit. </p>
+  </li>
+  <li>
+    <strong>Exceptions can be raised.</strong>
+    <p>
+      The raise method is from the Kernel module. By default, raise will create an exception of the RuntimeError class. To raise an exception of a specific class, you can pass in the class name as an argument.<br><br>
+      <code>
+        raise "Here is a regular RuntimeError"<br>
+        raise StandardError.new("Here is a StandardError")
+      </code>
+    </p>
+  </li>
+  <li>
+    <strong>When an exception is raised, it halts the program.</strong>
+    <p>
+      As a Ruby programmer, you encounter this on a day-to-day basis. Here's an example:<br>
+      <code>
+        "10" + 3<br>
+        TypeError: no implicit conversion of Fixnum into String
+      </code>
+      There's no way to continue from here. Basically, this is where our program has ended up.
+    </p>
+  </li>
+  <li>
+    <strong>Exceptions are associated with begin/rescue blocks.</strong>
+    <p>Begin/rescue blocks function a lot like if statements, in that if an exception is thrown in the "begin" part, you can rescue from it and essentially branch your program. Unlike an if statement, however, they can be a little more granular about what type of exception to rescue from.
+      <div><script src='https://gist.github.com/28839b613ab07b5494db.js?file=gistfile1.rb'></script>
+<noscript><pre><code>a = 7
+b = &quot;10&quot;
+
+begin
+   a + b #executes the expression
+rescue
+   puts &quot;Could not add variables a (#{a.class}) and b (#{b.class})&quot; #if an an exception is raised, this part will fire
+else
+   puts &quot;a + b is #{a + b}&quot; #otherwise, this part will fire 
+end</code></pre></noscript></div>
+</p>
+  </li>
+  <li>
+    <strong>Exceptions have methods.</strong>
+    <p>This ties into #1. They basically are backtrace, message, and inspect.</p>
+  </li>
+  <li>
+    <strong>Make sure you specify the Exception type you are rescuing from.</strong>
+    <p>Probably the most important point for last. Errors inherit from the class Exception. Exception has a big family tree. When you rescue from an Exception, be sure to be as specific as possible about the type, so that you don't accidentally rescue from an exception you weren't anticipating.</p>
+  </li>
+</ol>
+
+
+<p>Sources:<br>
+<a href="http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/"><a href="http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/</a></a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Efficient Coding With Rubymine:<br />a Quick Guide]]></title>
