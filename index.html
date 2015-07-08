@@ -177,7 +177,66 @@ end</code></pre></noscript></div>
   </li>
   <li>
     <strong>Make sure you specify the Exception type you are rescuing from.</strong>
-    <p>Probably the most important point for last. Errors inherit from the class Exception. Exception has a big family tree. When you rescue from an Exception, be sure to be as specific as possible about the type, so that you don't accidentally rescue from an exception you weren't anticipating.</p>
+    <p>
+      Probably the most important point for last. Errors inherit from the class Exception.<br>
+      <div><script src='https://gist.github.com/a6a37e11d8ae1d57d51e.js?file=exception_family_tree'></script>
+<noscript><pre><code>Exception
+ NoMemoryError
+ ScriptError
+   LoadError
+   NotImplementedError
+   SyntaxError
+ SignalException
+   Interrupt
+ StandardError
+   ArgumentError
+   IOError
+     EOFError
+   IndexError
+   LocalJumpError
+   NameError
+     NoMethodError
+   RangeError
+     FloatDomainError
+   RegexpError
+   RuntimeError
+   SecurityError
+   SystemCallError
+   SystemStackError
+   ThreadError
+   TypeError
+   ZeroDivisionError
+ SystemExit
+ fatal</code></pre></noscript></div>
+<br>
+      As you can see, Exception has a big family tree. When you rescue from an Exception, you want to be as specific as possible about the type, so that you don't accidentally rescue from an exception you weren't anticipating.
+      <div><script src='https://gist.github.com/a5f470a80d8df4c2d1d9.js?file=rescuing.rb'></script>
+<noscript><pre><code>
+#This code will rescue from ANY type of exception (like a SyntaxError)!! 
+begin
+  some_method
+rescue Exception =&gt; e
+  do_some_rescue_stuff_and_examine_this_exception
+end
+
+#This code will rescue from StandardErrors. Better!!
+begin
+  some_method
+rescue =&gt; e
+  do_some_rescue_stuff_and_examine_this_exception
+end
+
+#This code will rescue from PlayTypeErrors, which we have defined ourselves.
+begin
+  some_method
+rescue PlayTypeError =&gt; e
+  do_some_rescue_stuff_and_examine_this_exception
+end
+
+</code></pre></noscript></div>
+<br>
+      This wouldn't be fun, if say, you were trying to rescure from a connection error, and instead rescued from a NoMethodError. You have then unintentionally branched your program into the wrong type of logic.
+    </p>
   </li>
 </ol>
 
