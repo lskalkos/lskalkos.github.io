@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-07-16T16:14:56-04:00</updated>
+  <updated>2015-07-16T16:16:38-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -47,7 +47,7 @@ end
 <p>  end<br/>
 </code></p>
 
-<p>What was this neat little piece of code doing? Basically, raising an error if the user tried to enter an invalid action. I thought it was interesting, but soon moved on to other parts of the lab. However, I never forgot about the interesting little piece of code I had encountered. Ruby exceptions still feel inherently different to me than other parts of the language. They seem to be a little exotic, like rare birds in forest full of, I don&rsquo;t know, carrier pigeons. I guess this feeling makes sense, since exceptions tend to only come into play when things in our program go wrong. Also, there are a couple of special methods associated with them that not every class of object has. So, with that little intro here are a few things that are helpful in understanding exceptions:</p>
+<p>What was this neat little piece of code doing? Basically, raising an error if the user tried to enter an invalid action. I thought it was interesting, but soon moved on to other parts of the lab. However, I never forgot about the interesting little piece of code I had encountered. Ruby exceptions still feel inherently different to me than other parts of the language. They seem to be a little exotic, like rare birds in forest full of, I don&rsquo;t know, carrier pigeons. I guess this feeling makes sense, since exceptions tend to only come into play when things in our program go wrong. Also, there are a couple of special methods associated with them that not every class of object has. So, with that little intro here are 7 things that are helpful in understanding exceptions:</p>
 
 <ol>
   <li>
