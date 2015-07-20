@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-07-16T16:16:38-04:00</updated>
+  <updated>2015-07-20T18:08:26-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -12,6 +12,165 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How Javascript Is Interpreted]]></title>
+    <link href="http://lskalkos.github.io/blog/2015/07/19/how-javascript-is-interpreted/"/>
+    <updated>2015-07-19T14:50:51-04:00</updated>
+    <id>http://lskalkos.github.io/blog/2015/07/19/how-javascript-is-interpreted</id>
+    <content type="html"><![CDATA[<p>When you work with Javascript you learn that, unlike Ruby, a function in JS can &ldquo;see&rdquo; and alter variables declared outside its scope. This is because of how scoping works in Javascript. An inner function could overwrite a variable declared in the outside scope, or you could redclare a local variable to give it new meaning. Seems pretty straightforward. Then I read this piece of code:</p>
+
+<div><script src='https://gist.github.com/349dcf53f89c9cf1cc5d.js?file=foo.js'></script>
+<noscript><pre><code>var foo = 1;
+function bar() {
+    if (!foo) {
+        var foo = 10;
+    }
+    console.log(foo);
+}
+bar();</code></pre></noscript></div>
+
+
+<p>Looking at this I thought, oh, well, the variable foo is defined in the main scope, so the if block inside the function bar() will never execute when bar() is called, since bar is able to read a from the main scope. Therefore the program writes 1 to the console.</p>
+
+<p>Except no, it does not. It definitely writes 10 to the console. What the &amp;%$#^?</p>
+
+<p>Here is another JS mind twister.</p>
+
+<div><script src='https://gist.github.com/ccaefd5bece64f8531a4.js?file=b.js'></script>
+<noscript><pre><code>var a = 1;
+function b() {
+    a = 10;
+    return;
+    function a() {}
+}
+b();
+console.log(a);</code></pre></noscript></div>
+
+
+<p>Now 10 should definitely log to the console, right? Nope, it&rsquo;s 1. So what is going on?</p>
+
+<p>This is where it turns out to be important to have some idea of how Javascript&rsquo;s interpreter works, and how scoping, variable definition, and function declaration/expression all come into play. It&rsquo;s kind of nonintuitive and more intertwined than I realized.</p>
+
+<p>The question comes down to this: how do names actually come into scope in Javascript? It turns out it&rsquo;s through a well-defined order:</p>
+
+<ol>
+  <li>
+    <strong>Language-defined</strong>
+    <p>First, JS will apply language defined names to the scope. For example, all scopes within Javascript have the keywords <i>this</i>. Note that only functions create scope within Javascript. Thus, if you call a function within different functional contexts, the meaning of 'this' will change.</p>
+  </li>
+  <li>
+    <strong>Formal parameters</strong>
+    <p>Functions can have parameters formally defined on them. JS will read these next.</p>
+  </li>
+  <li>
+    <strong>Function declarations</strong>
+    <p>A function declaration looks like this:</p>
+    <code>
+      Declared(); //This will work as long as the function definition is declared in scope
+      <br>
+      function Declared(){
+        //Some stuff here;
+      }
+    </code>
+    <p>Declaration are "hoisted" to the top of the scope, so that you can effective call the function from anywhere within a function.</p>
+  </li>
+  <li>
+    <strong>Variable declarations*</strong>
+    <p>Note that these are the last thing to be defined by the interpreter, and the <i>assignment</i> is then *hoisted. <strong>However,</strong> the assignment still happens at the line of code where you declared it. This variable declaration rule also applies to function expressions (as opposed to function declarations, as in above).
+    <br>
+    <code>
+      a(); //This will result in an error because the variable hasn't been assigned yet
+      <br>
+      var a = function() { //Some stuff here. };
+    </code>
+    </p>
+  </li>
+</ol>
+
+
+
+
+<div><script src='https://gist.github.com/6393adc5f8af9f659e89.js?file=order_interpretation.js'></script>
+<noscript><pre><code>//1. Language-defined
+
+console.log(this); //This will print stuff out
+function languageKeywordsDefinedFirst(){
+    console.log(this); //This will also print stuff out
+}
+
+//2. Formal parameters
+
+function parametersDefinedNext(name) {
+    //First this/other language keywords defined
+    //Then parameters like name
+    console.log(name);
+}
+
+//3. Function declarations
+
+function funcDeclarationsNext(string) {
+    //First this/other language keywords defined
+    //Then parameters like string
+    //Then function declarations like aFuncDeclaration
+    function aFuncDeclaration(){
+        console.log(&quot;I&#39;m after language keywords and parameters&quot;);
+    }
+    
+}
+
+//4. Variable declarations
+
+var a = 1;
+
+function variablesLast(name){
+    //First language keywords
+    //Then parameters like name
+    //Then function declarations like aDeclaration
+    //Then variable declarations...which are hoisted!!
+    var b = 2;
+    function aDeclaration(){
+        
+    }
+}</code></pre></noscript></div>
+
+
+<p><caption>An overview of the order in which Javascript interprets code.</caption></p>
+
+<p>With our new found knowledge we can then explain how our gnarly original Javascript brain teasers are working:</p>
+
+<div><script src='https://gist.github.com/afb54acd52d366a807e4.js?file=foo_solution.js'></script>
+<noscript><pre><code>var foo = 1;
+function bar() {
+  //var foo; --&gt; JS sees a local variable declaration of var foo within the function bar()
+  //At this point foo is undefined
+    if (!foo) {
+        var foo = 10; //Thus, this line of code executes
+    }
+    console.log(foo); //foo is not equal to 10, and so 10 is logged to the console
+}
+bar(); //This prints 10</code></pre></noscript></div>
+
+
+
+
+<div><script src='https://gist.github.com/c23bd7485d91eb08a820.js?file=b_solution.js'></script>
+<noscript><pre><code>var a = 1;
+function b() {
+  //var a; --&gt; JS sees a local variable declaration of var a due to the function expression on line 6
+    a = 10; //Thus, the function b() assigns the local variable a to 10....and not the outer variable a.
+    return;
+    function a() {}
+}
+b();
+console.log(a); //This statement reads from the outer variable a, which remains 1. Thus it prints 1.</code></pre></noscript></div>
+
+
+<p>Sources:</p>
+
+<p><a href="http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html"><a href="http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html">http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html</a></a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Minority Report:<br />Ruby Exceptions & Errors]]></title>
