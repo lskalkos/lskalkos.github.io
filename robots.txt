@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: 
+Disallow:
 
-Sitemap: http://lskalkos.github.io/sitemap.xml 
+Sitemap: http://lskalkos.github.io/sitemap.xml

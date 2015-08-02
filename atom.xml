@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-07-20T18:08:26-04:00</updated>
+  <updated>2015-08-02T14:31:19-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -12,6 +12,81 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[TDD vs. BDD vs. Unit vs. Functional Testing and More]]></title>
+    <link href="http://lskalkos.github.io/blog/2015/08/02/tdd-vs-bdd-vs-units-vs-functional-testing/"/>
+    <updated>2015-08-02T12:56:49-04:00</updated>
+    <id>http://lskalkos.github.io/blog/2015/08/02/tdd-vs-bdd-vs-units-vs-functional-testing</id>
+    <content type="html"><![CDATA[<p>Here at FlatIron we are about to embark on a TDD, or Test-Driven Development 2-week project sprint. With that in mind, I set out to learn more about testing, which is one of the most important part of building any application, and which I intend to learn a lot about. As I learned from listening to RailsConf, testing is more than making sure your application works as you expect &ndash; it also functions as a consistent form of communication across a team and application &ndash; meaning another developer can come on board, get oriented, and confidently begin contributing to an application with the tests as a guide. More than that, it can help communicate from the business requirement level to the development level. Soon after embarking on my test research mission, I found myself thrust into a complex world with terms like BDD (Behavior Driven Development), unit testing, functional testing, feature testing, and more. Since my team and I intend to take testing very seriously in this sprint, I thought I&rsquo;d take some time to explore each of these testing philosophies and see what they might contribute.</p>
+
+<h2>Testing Paradigms/Processes</h2>
+
+
+<p><strong>TDD / Test-Driven Development</strong></p>
+
+<p>Test Driven Development refers to a process by which you develop and test your code. Under a TDD paradigm, your development process looks something like this:</p>
+
+
+<ol>
+  <li>Before coding, you write a test</li>
+  <li>Run the tests along with any other tests</li>
+  <li>Write the minimum amount of code necessary to make the tests pass</li>
+  <li>Refactor</li>
+  <li>Repeat the process</li>
+</ol>
+
+
+<p>TDD is not to be confused with unit testing or any other <i>style</i> of testing. Rather it refers to a process by which you can approach development. With TDD, you can get broad test coverage of your application. This gives you the confidence to make changes to your application as it grows, because you can see older tests passing and trust that your changes have not broken anything.</p>
+
+
+<p><strong>BDD / Behavior-Driven Development</strong></p>
+
+<p>Like TDD, Behavior Driven Development is a process by which you can approach development and testing. However, unlike TDD, BDD is more focused on <i>how</i> you test than <i>when</i> you test. With BDD, you focus your tests on behavior, rather than implementation, ideally starting from your customer's/user's expected experience. You picture your application as a black box (in other words, you try not to think about how your app reaches a result, but rather what the result should be first), from which the user gives an input, and they receive the expected result -- i.e. if I click on this button, I expect to see this result. This format leads to what is called <strong>outside-in testing</strong>, in which you begin with a high level test that begins with the user's expectation, and that test inevitably (and rather gracefully) drives you down to develop and test lower levels of your stack.</p>
+
+
+<p>Perhaps the biggest contribution of BDD is that helps you avoid brittle testing and therefore a brittle design in your application. You can imagine that, if you start testing implementation rather than behavior, you may starts writing code that simply confirms the work you have already done. Starting with the highest level of functionality and letting that drive how you test and develop your application makes your code more flexible and resilient. For optimal development practice, BDD can and should be paired with TDD.</p>
+
+
+
+
+<h2>Testing Types</h2>
+
+
+<p><strong>Unit Test</strong></p>
+
+<p>So what then is a unit test and how does it fit in to TDD/BDD? A unit test focuses on a single “unit of code”, such as a class method. Ideally the unit test in isolation from other dependencies, such as a connection to a database. All values should be stubbed or mocked, and the unit test runs solely in memory. That way you have a more abstract and thus more powerful low level test.</p>
+
+
+<p><strong>Integration Test</strong></p>
+
+<p>Per the name, an integration test builds on the unit test by testing multiple pieces of your application together. For example, testing an API interaction in your application. This type of test should find bugs that the unit test can't.</p>
+
+
+<p><strong>Acceptance/Functional Tests</strong></p>
+
+<p>Functional tests compare the result of a given input to a specification. These seem to be the most BDD-type of test, and they might be the best place to begin when designing your application. </p>
+
+
+
+
+<p>The definition I read of acceptance test that I like best is "An acceptance test suite is basically an executable specification written in a domain specific language that describes the tests in the language used by the users of the system." Acceptance tests seem to be the test translation of the user specifications, and they test the functionality of the whole application at the highest level.</p>
+
+
+
+
+<p>Obviously, there is no exact prescription for how to test an application. If you explore the interwebs, you'll find some surprisingly furious debate about the definition and purpose of all these different testing methodologies. But having even a general understanding of the different tools at your disposal should help you make better decisions for your application. All of these testing paradigms and types should be taken into consideration when building a robust test suite for your application that helps you design it better. If you're finding it difficult to write a test, take a moment and consider whether you're writing the right kind of to test. If you're starting at the unit test level, you may be starting too far down the stack. Figure out what your features are and work down. It might be difficult, but your application will be better as a result of it.</p>
+
+
+<p>Sources:
+<br>
+<a href="https://robots.thoughtbot.com/testing-from-the-outsidein"><a href="https://robots.thoughtbot.com/testing-from-the-outsidein">https://robots.thoughtbot.com/testing-from-the-outsidein</a></a>
+<br>
+<a href="https://www.youtube.com/watch?v=SOi_1reKn8M"><a href="https://www.youtube.com/watch?v=SOi_1reKn8M">https://www.youtube.com/watch?v=SOi_1reKn8M</a></a>
+<br>
+<a href="http://stackoverflow.com/questions/4904096/whats-the-difference-between-unit-functional-acceptance-and-integration-test"><a href="http://stackoverflow.com/questions/4904096/whats-the-difference-between-unit-functional-acceptance-and-integration-test">http://stackoverflow.com/questions/4904096/whats-the-difference-between-unit-functional-acceptance-and-integration-test</a></a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Javascript Is Interpreted]]></title>
