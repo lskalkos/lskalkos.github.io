@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-08-16T12:18:32-04:00</updated>
+  <updated>2015-08-16T12:23:17-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How Programming Makes You a Better Person]]></title>
+    <link href="http://lskalkos.github.io/blog/2015/08/16/how-programming-makes-you-a-better-person/"/>
+    <updated>2015-08-16T14:00:40-04:00</updated>
+    <id>http://lskalkos.github.io/blog/2015/08/16/how-programming-makes-you-a-better-person</id>
+    <content type="html"><![CDATA[<blockquote>
+  People think that computer science is the art of geniuses but the actual reality is the opposite, just many people doing things that build on each other, like a wall of mini stones.
+  <br>
+  <br>
+  Donald Knuth
+</blockquote>
+
+
+
+
+<ul>
+  <li><strong>It's humbling</strong></li>
+  <p>You get to work with really smart people. Also, if you haven't followed the traditional route of getting a computer science degree, you learn how to deal with facing higher barriers of entry to the field. You learn to deal with the fact that some people are just going to be more competitive candidates than you, and that all you can do is strive to be better.</p>
+  <li><strong>It's also empowering</strong></li>
+  <p>While there are differences in people's ability, you realize that you have more or less potential as anyone else to contribute positively to the world. Programming solves problems.</p>
+  <li><strong>You begin to question things at a deeper level.</strong></li>
+  <p>Programming is effective at eliminating assumptions about the way something works. You become better at evaluating your own false preconceptions, often of which, to your surprise, there are many. This way of thinking inevitably expands into other areas of your life. You become slower to jump to conclusions. You begin to question what you're told, and learn that you need to find out for yourself. As a result, you become more effective in your work and life, and you tend to trust yourself more. You have fewer opinions and tend to value evidence-based approaches. This begins to apply on a wider and wider scale.</p>
+  <li><strong>It encourages you to be a team player</strong></li>
+  <p>Sometimes you have to put aside your own thinking for the team, which ultimately is linked to the goal of the project itself. You discover that you can accomplish more through working with others.</p>
+  <li><strong>It encourages you to be analytical</strong></li>
+  <p>The more understanding you have of something, the easier is becomes to solve a problem related to it. You think about the reasoning behind a certain approach.</p>
+  <li><strong>You can actually contribute to the body of human knowledge</strong></li>
+  <p>While human advancement has often been portrayed as the lone genius having a stroke of insight, the reality is that progress is built on the groundwork of others. Other more academic fields such as physics or biology have a high bar of entry -- you have to have been studying them long enough to contribute to a niche area. With programming it's fairly easy to add to the common body of knowledge.</p>
+  <li><strong>It rewards persistance, resourcefulness, and hard work</strong></li>
+  <p>You often come across problems for which you can't find solutions on the internet and have to come up with it yourself.</p>
+  <li><strong>It gives you a renewed appreciation for education</li>
+  <p>When you've had to slog through hours of debugging or learning to code on your own, you gain such an appreciation for someone telling you how to something. Then you suck the information so hard from their brain that they never have to tell you again, and now you are a 10X more efficient programmer. It makes you understand the value of education, which is to enable you to think critically and solve problems. As a consequence, it makes you want to help educate others.</p>
+  <li><strong>It rewards curiosity and a love for learning</strong></li>
+  <p>It's a privelege to be able to do something that is intellectually challenging, where you get to learn something new everyday.</p>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[TDD vs. BDD vs. Unit vs. Functional Testing and More]]></title>
@@ -85,45 +124,6 @@
 <a href="https://www.youtube.com/watch?v=SOi_1reKn8M"><a href="https://www.youtube.com/watch?v=SOi_1reKn8M">https://www.youtube.com/watch?v=SOi_1reKn8M</a></a>
 <br>
 <a href="http://stackoverflow.com/questions/4904096/whats-the-difference-between-unit-functional-acceptance-and-integration-test"><a href="http://stackoverflow.com/questions/4904096/whats-the-difference-between-unit-functional-acceptance-and-integration-test">http://stackoverflow.com/questions/4904096/whats-the-difference-between-unit-functional-acceptance-and-integration-test</a></a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How Programming Makes You a Better Person]]></title>
-    <link href="http://lskalkos.github.io/blog/2015/07/31/how-programming-makes-you-a-better-person/"/>
-    <updated>2015-07-31T14:00:40-04:00</updated>
-    <id>http://lskalkos.github.io/blog/2015/07/31/how-programming-makes-you-a-better-person</id>
-    <content type="html"><![CDATA[<blockquote>
-  People think that computer science is the art of geniuses but the actual reality is the opposite, just many people doing things that build on each other, like a wall of mini stones.
-  <br>
-  <br>
-  Donald Knuth
-</blockquote>
-
-
-
-
-<ul>
-  <li><strong>It's humbling</strong></li>
-  <p>You get to work with really smart people. Also, if you haven't followed the traditional route of getting a computer science degree, you learn how to deal with facing higher barriers of entry to the field. You learn to deal with the fact that some people are just going to be more competitive candidates than you, and that all you can do is strive to be better.</p>
-  <li><strong>It's also empowering</strong></li>
-  <p>While there are differences in people's ability, you realize that you have more or less potential as anyone else to contribute positively to the world. Programming solves problems.</p>
-  <li><strong>You begin to question things at a deeper level.</strong></li>
-  <p>Programming is effective at eliminating assumptions about the way something works. You become better at evaluating your own false preconceptions, often of which, to your surprise, there are many. This way of thinking inevitably expands into other areas of your life. You become slower to jump to conclusions. You begin to question what you're told, and learn that you need to find out for yourself. As a result, you become more effective in your work and life, and you tend to trust yourself more. You have fewer opinions and tend to value evidence-based approaches. This begins to apply on a wider and wider scale.</p>
-  <li><strong>It encourages you to be a team player</strong></li>
-  <p>Sometimes you have to put aside your own thinking for the team, which ultimately is linked to the goal of the project itself. You discover that you can accomplish more through working with others.</p>
-  <li><strong>It encourages you to be analytical</strong></li>
-  <p>The more understanding you have of something, the easier is becomes to solve a problem related to it. You think about the reasoning behind a certain approach.</p>
-  <li><strong>You can actually contribute to the body of human knowledge</strong></li>
-  <p>While human advancement has often been portrayed as the lone genius having a stroke of insight, the reality is that progress is built on the groundwork of others. Other more academic fields such as physics or biology have a high bar of entry -- you have to have been studying them long enough to contribute to a niche area. With programming it's fairly easy to add to the common body of knowledge.</p>
-  <li><strong>It rewards persistance, resourcefulness, and hard work</strong></li>
-  <p>You often come across problems for which you can't find solutions on the internet and have to come up with it yourself.</p>
-  <li><strong>It gives you a renewed appreciation for education</li>
-  <p>When you've had to slog through hours of debugging or learning to code on your own, you gain such an appreciation for someone telling you how to something. Then you suck the information so hard from their brain that they never have to tell you again, and now you are a 10X more efficient programmer. It makes you understand the value of education, which is to enable you to think critically and solve problems. As a consequence, it makes you want to help educate others.</p>
-  <li><strong>It rewards curiosity and a love for learning</strong></li>
-  <p>It's a privelege to be able to do something that is intellectually challenging, where you get to learn something new everyday.</p>
-</ul>
-
 ]]></content>
   </entry>
   
