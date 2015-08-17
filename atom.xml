@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-08-16T12:24:20-04:00</updated>
+  <updated>2015-08-17T19:26:21-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Working With Scheduling and Time in a Rails Application]]></title>
+    <link href="http://lskalkos.github.io/blog/2015/08/17/working-with-scheduling-and-time-in-a-rails-application/"/>
+    <updated>2015-08-17T09:07:04-04:00</updated>
+    <id>http://lskalkos.github.io/blog/2015/08/17/working-with-scheduling-and-time-in-a-rails-application</id>
+    <content type="html"><![CDATA[<h1>Part I</h1>
+
+
+
+
+<p>We just finished up project mode here at Flatiron. Something that seemed to be surprisingly complicated in our final project was working with time. To give a summary of our application, <a href="https://github.com/lskalkos/medmed">MedMed</a> allows doctors to prescribe medication to a patient with a start time and an end time. The result of this prescription is a list of scheduled doses that appear when the patient logs in to the system. There were a couple challenges with this functionality: One, how to conceptualize a scheduling system generally, and two, considering that each patient could be in a different time zone, how to ensure the patient sees the correct time for their scheduled dose.</p>
+
+
+
+
+<h2>Thinking Through the Domain</h2>
+
+
+
+
+<p>For starters, we had to think through our domain. We envisioned a Prescription class having a start time and end time, but we needed to make the leap from that to showing a patient a list of scheduled medications they were supposed to take that day. This end result functionality felt inherently different from a Prescription, though it obviously felt closely tied to it. The tact we ended up taking was to envision our end goal -- a list of scheduled doses -- and to think about how we wanted our models to work based on that.</p>
+
+
+<p></p>
+
+<p>Given our goal, we realized it made sense to have a ScheduledDose model, each instance of which would represent a patient's scheduled dose. A ScheduledDose would have a scheduled time, a medication name, and would also be linked to a prescription and a patient. Thus, we needed to somehow derive our ScheduledDoses from a patient's Prescription.</p>
+
+
+
+
+<h2>Enter IceCube</h2>
+
+
+
+
+<p>Our initial instinct was that we needed some sort of Schedule model to represent recurring scheduled doses events. The problem of scheduling actually appeared to be a <a href="http://martinfowler.com/apsupp/recurring.pdf">fairly complex one</a>. One of the problems that Martin Fowler gets at in <a href="http://martinfowler.com/apsupp/recurring.pdf">this article on scheduling</a> is that as backend developers, we tend to think of our models in terms of properties, rather than behavior, and the idea of a Schedule is more about behavior than its properties. When you get right down to it, a Schedule really just encapsulates the idea of a recurring event. A doctor might want to schedule a medication to be taken daily, or twice a week, or perhaps every other week. Thinking about what we wanted our interface to function once again helped clarify our end goal. We realized that we wanted a doctor to be able to schedule a prescription much like you would schedule a Google Calendar event. 
+
+<img src="images/google_calendar_event.png" style="display: block; margin: 20px auto 20px;"/>
+
+After looking at the Google Calendar interface, which seemed to implement a set of rules, we suspected that scheduling was a problem that has been dealt with before in programming land. We therefore took to the internet where we discovered <a href="https://github.com/seejohnrun/ice_cube">IceCube</a>.</p>
+
+
+
+
+<p>IceCube conceptualizes scheduling with two objects: the Schedule and the Rule. Schedules have rules which determine a schedule's occurences. To use an IceCube schedule, you add a recurrence rule to a schedule, and then get a list of occurrences back. This representation of scheduling felt pretty organic and we found we could add rules that corresponded very closely to the Google Calendar interface. Moreover, the list of occurences we could get back from the schedule would very nicely correspond to our list of patient ScheduledDoses. This neat little gem seemed to fit the bill perfectly.</p>
+
+
+
+
+<div><script src='https://gist.github.com/da0ff36b6004b7b80703.js?file=scheduling.rb'></script>
+<noscript><pre><code>class Prescription &lt; ActiveRecord::Base
+  include IceCube
+  serialize :recurrence, IceCube::Schedule
+
+  def schedule
+    if recurrence.nil?
+      self.recurrence = IceCube::Schedule.new(start = translate_time_to_utc(start_datetime), :end_time =&gt; translate_time_to_utc(start_datetime))
+    end
+
+    self.recurrence
+  end
+
+  def add_daily_recurrence_rule(interval)
+    self.schedule.add_recurrence_rule IceCube::Rule.daily(interval)
+  end
+  
+end
+</code></pre></noscript></div>
+
+
+
+
+<p>To use IceCube within your application, you need to install the IceCube gem in your Gemfile, bundle, and include it as a module in you model. IceCube Schedule objects are saved as YAML via the Rails serialize macro, which is used to retrieve data as objects.</p>
+
+
+
+
+<p>In our case, because a Prescription has a start time and an end time, we set the IceCube schedule automatically and wrap it within a schedule instance method. We then use the IceCube add_reccurence_rule methods to add rules to our schedules and create occurences. From there, we basically end up using as a Prescription model as a factory for ScheduledDose instances, using the schedule occurrences as the basis for ScheduledDoses.</p>
+
+
+
+
+<p>Something that seems like a potential code smell is not having a separate Schedule model. It seems like this could be a separate responsibility from Prescription, and our Prescription model seems like it might be in danger of becoming a god object. But after giving it a little more thought, it seems like it might be okay for Prescription to own the schedule and be a factory for scheduled doses. Prescription doesn't seem likely to change a lot, since our application doesn't do much with it beyond generate scheduled doses. As such, scheduling seems to be an appropriate responsibility for prescription. This also aligns with the idea of prescription in real life too -- a prescription is really just a set of instructions for a repeated dose of medication.</p>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Programming Makes You a Better Person]]></title>

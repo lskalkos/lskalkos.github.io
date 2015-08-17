@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Working With Scheduling and Time in a Rails Application - Lia.Skalkos</title>
+  <meta name="author" content="Lia Skalkos">
+
+  
+  <meta name="description" content="Part I We just finished up project mode here at Flatiron. Something that seemed to be surprisingly complicated in our final project was working with &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lskalkos.github.io/blog/2015/08/17/working-with-scheduling-and-time-in-a-rails-application">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Lia.Skalkos" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet" type="text/css">
+<!--- MathJax Configuration -->
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Lia.Skalkos</a></h1>
+  
+    <h2>Life in code.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscribe" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS" target="_blank"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewbox="0 0 100 100"><path class="social" d="M 13.310204,73.332654 C 5.967347,73.332654 0,79.322448 0,86.621428 c 0,7.338776 5.967347,13.262246 13.310204,13.262246 7.370408,0 13.328572,-5.92245 13.328572,-13.262246 0,-7.29898 -5.958164,-13.288774 -13.328572,-13.288774 z M 0.01530612,33.978572 V 53.143878 C 12.493878,53.143878 24.229592,58.02347 33.068368,66.865306 41.894898,75.685714 46.767346,87.47449 46.767346,100 h 19.25 C 66.017346,63.592858 36.4,33.979592 0.01530612,33.978572 l 0,0 z M 0.03877552,0 V 19.17449 C 44.54796,19.17551 80.77551,55.437756 80.77551,100 H 100 C 100,44.87653 55.15102,0 0.03877552,0 z"></path></svg></a></li>
+  
+</ul>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+      <form action="https://www.google.com/search" method="get">
+        <fieldset role="search">
+          <input type="hidden" name="sitesearch" value="lskalkos.github.io" />
+    
+          <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+        </fieldset>
+      </form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Working With Scheduling and Time in a Rails Application</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-17T09:07:04-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:07 am</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>Part I</h1>
+
+
+
+
+<p>We just finished up project mode here at Flatiron. Something that seemed to be surprisingly complicated in our final project was working with time. To give a summary of our application, <a href="https://github.com/lskalkos/medmed">MedMed</a> allows doctors to prescribe medication to a patient with a start time and an end time. The result of this prescription is a list of scheduled doses that appear when the patient logs in to the system. There were a couple challenges with this functionality: One, how to conceptualize a scheduling system generally, and two, considering that each patient could be in a different time zone, how to ensure the patient sees the correct time for their scheduled dose.</p>
+
+
+
+
+<h2>Thinking Through the Domain</h2>
+
+
+
+
+<p>For starters, we had to think through our domain. We envisioned a Prescription class having a start time and end time, but we needed to make the leap from that to showing a patient a list of scheduled medications they were supposed to take that day. This end result functionality felt inherently different from a Prescription, though it obviously felt closely tied to it. The tact we ended up taking was to envision our end goal -- a list of scheduled doses -- and to think about how we wanted our models to work based on that.</p>
+
+
+<p></p>
+
+<p>Given our goal, we realized it made sense to have a ScheduledDose model, each instance of which would represent a patient's scheduled dose. A ScheduledDose would have a scheduled time, a medication name, and would also be linked to a prescription and a patient. Thus, we needed to somehow derive our ScheduledDoses from a patient's Prescription.</p>
+
+
+
+
+<h2>Enter IceCube</h2>
+
+
+
+
+<p>Our initial instinct was that we needed some sort of Schedule model to represent recurring scheduled doses events. The problem of scheduling actually appeared to be a <a href="http://martinfowler.com/apsupp/recurring.pdf">fairly complex one</a>. One of the problems that Martin Fowler gets at in <a href="http://martinfowler.com/apsupp/recurring.pdf">this article on scheduling</a> is that as backend developers, we tend to think of our models in terms of properties, rather than behavior, and the idea of a Schedule is more about behavior than its properties. When you get right down to it, a Schedule really just encapsulates the idea of a recurring event. A doctor might want to schedule a medication to be taken daily, or twice a week, or perhaps every other week. Thinking about what we wanted our interface to function once again helped clarify our end goal. We realized that we wanted a doctor to be able to schedule a prescription much like you would schedule a Google Calendar event. 
+
+<img src="images/google_calendar_event.png" style="display: block; margin: 20px auto 20px;"/>
+
+After looking at the Google Calendar interface, which seemed to implement a set of rules, we suspected that scheduling was a problem that has been dealt with before in programming land. We therefore took to the internet where we discovered <a href="https://github.com/seejohnrun/ice_cube">IceCube</a>.</p>
+
+
+
+
+<p>IceCube conceptualizes scheduling with two objects: the Schedule and the Rule. Schedules have rules which determine a schedule's occurences. To use an IceCube schedule, you add a recurrence rule to a schedule, and then get a list of occurrences back. This representation of scheduling felt pretty organic and we found we could add rules that corresponded very closely to the Google Calendar interface. Moreover, the list of occurences we could get back from the schedule would very nicely correspond to our list of patient ScheduledDoses. This neat little gem seemed to fit the bill perfectly.</p>
+
+
+
+
+<div><script src='https://gist.github.com/da0ff36b6004b7b80703.js?file=scheduling.rb'></script>
+<noscript><pre><code>class Prescription &lt; ActiveRecord::Base
+  include IceCube
+  serialize :recurrence, IceCube::Schedule
+
+  def schedule
+    if recurrence.nil?
+      self.recurrence = IceCube::Schedule.new(start = translate_time_to_utc(start_datetime), :end_time =&gt; translate_time_to_utc(start_datetime))
+    end
+
+    self.recurrence
+  end
+
+  def add_daily_recurrence_rule(interval)
+    self.schedule.add_recurrence_rule IceCube::Rule.daily(interval)
+  end
+  
+end
+</code></pre></noscript></div>
+
+
+
+
+<p>To use IceCube within your application, you need to install the IceCube gem in your Gemfile, bundle, and include it as a module in you model. IceCube Schedule objects are saved as YAML via the Rails serialize macro, which is used to retrieve data as objects.</p>
+
+
+
+
+<p>In our case, because a Prescription has a start time and an end time, we set the IceCube schedule automatically and wrap it within a schedule instance method. We then use the IceCube add_reccurence_rule methods to add rules to our schedules and create occurences. From there, we basically end up using as a Prescription model as a factory for ScheduledDose instances, using the schedule occurrences as the basis for ScheduledDoses.</p>
+
+
+
+
+<p>Something that seems like a potential code smell is not having a separate Schedule model. It seems like this could be a separate responsibility from Prescription, and our Prescription model seems like it might be in danger of becoming a god object. But after giving it a little more thought, it seems like it might be okay for Prescription to own the schedule and be a factory for scheduled doses. Prescription doesn't seem likely to change a lot, since our application doesn't do much with it beyond generate scheduled doses. As such, scheduling seems to be an appropriate responsibility for prescription. This also aligns with the idea of prescription in real life too -- a prescription is really just a set of instructions for a repeated dose of medication.</p>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+
+  <span class="byline author vcard">Authored by <span class="fn">
+  
+    Lia Skalkos
+  
+  </span></span>
+
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-08-17T09:07:04-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:07 am</span></time>
+      
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lskalkos.github.io/blog/2015/08/17/working-with-scheduling-and-time-in-a-rails-application/" data-via="" data-counturl="http://lskalkos.github.io/blog/2015/08/17/working-with-scheduling-and-time-in-a-rails-application/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/08/16/how-programming-makes-you-a-better-person/" title="Previous Post: How Programming Makes You a Better Person">&laquo; How Programming Makes You a Better Person</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Lia Skalkos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> | Themed with <a href="https://github.com/lucaslew/whitespace">Whitespace</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
