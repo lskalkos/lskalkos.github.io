@@ -9,7 +9,7 @@
   <meta name="author" content="Lia Skalkos">
 
   
-  <meta name="description" content="Part I We just finished up project mode here at Flatiron. Something that seemed to be surprisingly complicated in our final project was working with &hellip;">
+  <meta name="description" content="Let's imagine a problem: you are in charge of building an airport runway scheduling system. Let's say that today you have 3 take-offs and 3 landings &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,98 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/01/recursion/">The Airport Runway Problem: A Look at Binary Trees and Big O</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-01T20:31:25-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>8:31 pm</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="http://orig09.deviantart.net/0cf5/f/2009/109/3/4/fractal_tree_by_tararoys.gif" alt="Fractal tree" style="display: block; margin: 0 auto;"></p>
+
+<p>Let's imagine a problem: you are in charge of building an airport runway scheduling system. Let's say that today you have 3 take-offs and 3 landings scheduled, but now another airline wants to see if they can schedule a take-off today as well. How could we handle this new request such that it isn't too big a deal?</p>
+
+
+
+
+<p>Well, we could store our take-offs and landings in an <strong>array</strong> in order. But now we have this new request for a take-off that happens to be in the middle of our take-offs and landings. Without even checking to see if it would overlap with another flight, we could insert it into our array in an O(1), constant operation and then resort the entire thing. With a quicksort or a mergesort, this could be done in (an average of) O(nlogn) time, but this doesn't seem ideal.</p>
+
+
+
+
+<p>Given our array is already in order, we could just skip doing a full resort and iterate through it until we find the right insertion point. This could be done in O(logn) time via a binary search (a divide and conquer strategy).  But now (in the worst case) we might have to move over <i>all</i> the elements in our array every time we want to add in a new take-off or landing, meaning we are looking at an O(n) problem just for the insertion of the new data. Again, not ideal if you're trying to build a system that is scheduling many take-offs and landings a day, right? Enter binary trees.</p>
+
+
+<p><img src="http://he-s3.s3-website-ap-southeast-1.amazonaws.com/static/images/Questions/BinaryTree.png" style="display: block; margin: 0 auto;" /></p>
+
+<p>Per wikipedia: a binary tree is "a tree data structure in which each node has at most two children, which are referred to as the left child and the right child." But binary trees also have a <strong>recursive definition</strong>, which is a mathematical (set theory) definition, which is that a binary tree consists of a set of three: a left, a right, and a singleton, where the left and right are also binary trees or a null set.</p>
+
+
+
+
+<p>Let's say the example above represents our flight system in military time. We have flights scheduled at 8 am, 3am, 10am, and so on. Now let's say we want to add in a take-off an 9am. To do this we start at the first node and look at the value -- 8am. Because 9am is later than 8am, we go to the right. If we were booking an earlier take-off, we would go to the left. Because we have gone to the right, the next node is 10am. We ask the same question again: is 9am earlier or later than 10am? Because it's earlier, we go to the left and check if there is a node. No node, so we can go ahead and insert 9am as a new node to the left of 10am. Insertion in a binary tree is an O(1) problem, compared to the array, which was O(n). Phew, that's a lot better!</p>
+
+
+
+
+<p>Notice that in the worst case, though, <strong>finding the correct insertion point could be O(n)</strong> -- even worse than a sorted array. This would happen if our binary tree happened to get filled in order, say, 1am, 2am, 3am, and so on, because we would have to go through all the elements in our tree before we get to the correct point to add in 9am. From this, we can observe that the amount of time it takes to find our new insertion point correlates to the height of the tree --- O(log<sub>2</sub>n).</p>
+
+
+
+
+<p>The minimum height for a binary tree of <em>n</em> nodes is log<sub>2</sub>n. In the case of 1 million scheduled flights, to find the insertion point, we'd be looking at a difference of O(1 million) if the tree is in order and O(19) if the tree is "balanced". We can see that there would be a huge difference in effiency between an ordered binary tree -- essentially now a linked list -- and a so-called balanced binary tree. To get a balanced binary tree, we have to ensure that our data gets added in randomized order. If that isn't possible, then you have to perform certain operations at key times to keep the tree balanced.</p>
+
+
+
+
+<p>If we want to spit out our schedule in order, in the case of both the array and the binary tree, we have to iterate through all the elements resulting in an O(n) operation in both cases. However, in the airport runway system, the binary tree wins over the array because it is much more efficient for inserting new values.</p>
+
+
+
+
+<h3>TLDR?</h3>
+
+
+
+
+<ul>
+  <li>For sorted data that must be updated frequently, binary trees win out over arrays because they are more <strong>efficient at insertion.</strong></li>
+  <li>But make sure the binary tree gets the data in random order (i.e. stays a balanced binary tree), because otherwise they become a linked list and looking up the correct insertion point becomes O(n).</li>
+  <li>Big O notation is actually not that scary.</li>
+  <li>Graphing Big O functions on https://www.desmos.com/calculator is super helpful to get an idea of how they perform.</li>
+</ul>
+
+
+
+
+<p>Sources</p>
+
+
+<p><a href="https://en.wikipedia.org/wiki/Binary_tree"><a href="https://en.wikipedia.org/wiki/Binary_tree">https://en.wikipedia.org/wiki/Binary_tree</a></a><br>
+<a href="https://www.youtube.com/watch?v=9Jry5-82I68"><a href="https://www.youtube.com/watch?v=9Jry5-82I68">https://www.youtube.com/watch?v=9Jry5-82I68</a></a><br>
+<a href="https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree"><a href="https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree">https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree</a></a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
