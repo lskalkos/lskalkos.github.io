@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-09-03T12:10:07-04:00</updated>
+  <updated>2015-09-29T14:38:56-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -12,6 +12,155 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing the Javascript Module Pattern]]></title>
+    <link href="http://lskalkos.github.io/blog/2015/09/22/adding-elasticsearch-to-your-rails-project/"/>
+    <updated>2015-09-22T16:58:02-04:00</updated>
+    <id>http://lskalkos.github.io/blog/2015/09/22/adding-elasticsearch-to-your-rails-project</id>
+    <content type="html"><![CDATA[<p><img src="https://media.giphy.com/media/vyGU7aL3vgl7G/giphy.gif" alt="" style="display: block; margin: 0 auto;"></p>
+
+<p>Some time ago, in a job far far away (not that far away), I saw some JavaScript code that looked like this:</p>
+
+<p><code>
+  ;(function($) {
+    //etc&hellip;
+  }(jQuery));
+</code></p>
+
+<p>I wondered what this strange beast was and why anyone would write such code. It took me a little while to find out why, but now know and I thought I&rsquo;d share it with the world. That reason is called the module pattern.</p>
+
+<h1>Why use the module pattern?</h1>
+
+
+<p></p>
+
+<p>Imagine you are writing an application with lots of JavaScript. You could just write your JavaScript in one long stream, spaghetti-like fashion in a file, but there would be a few problems with this:</p>
+
+<ol>
+  <li>You might pollute the Global Namespace, and there could be conflicts with other libraries or scripts your app makes use of</li>
+  <li>You might have made some piece of code that shouldn't have been -- like a connection to an API -- publicly accessible with one simple function call to the console</li>
+  <li>Your code will be disorganized and will get harder and harder to manage</li>
+</ol>
+
+
+<p>Here is an example of a piece of code that doesn&rsquo;t follow the module pattern, or any other pattern, that might produce the above problems. It&rsquo;s just some vanilla JS.</p>
+
+<div><script src='https://gist.github.com/d1919873c617555e5c39.js?file=foo.js'></script>
+<noscript><pre><code>  function foo(){
+    console.log(&quot;foo&quot;);
+  }
+  
+  foo();</code></pre></noscript></div>
+
+
+<p>In the above example, &ldquo;foo&rdquo; might conflict with another variable named foo in the global namespace. Also, anyone can call &ldquo;foo&rdquo; by typing it directly into the browser console.</p>
+
+<p>Enter the module pattern.</p>
+
+<h1>How it Works</h1>
+
+
+<p>The module pattern is named thusly because it is a design pattern. Design patterns, per a quick Google search, are &ldquo;solutions to software design problems you find again and again in real-world application development. Patterns are about reusable designs and interactions of objects.&rdquo;</p>
+
+<p>Here is the same piece of code from above in a very plain module pattern format:</p>
+
+<h2>Basic Module Pattern</h2>
+
+
+
+
+<div><script src='https://gist.github.com/11e1650039deb98ea8aa.js?file=plain_module.js'></script>
+<noscript><pre><code>(function(){
+  function foo(){
+    console.log(&quot;foo&quot;);
+  }
+
+  foo();
+}());</code></pre></noscript></div>
+
+
+<p>Here we are wrapping the same code from before in an anonymous function expression that executes immediately. You create one of these by declaring an anonymous function, adding the parentheses on the end to signal execution, and wrapping the whole thing in a set of parentheses to tell the interpreter this is an expression to be evaluated. This is called an Immediately-Invoked Function Expression (IIFE).</p>
+
+<p>This code creates its own local scope, but then immediately executes our code, giving us the same functionality as before, but protecting it from the global scope.</p>
+
+<p>There are a few shorthand ways to write the IIFE that will save yourself a couple bytes and might look a little cleaner. You can just remove the wrapping parentheses and use an exclamation mark or plus sign at the beginning of your function.</p>
+
+<p>A few variations on this simple pattern make it even more useful. In the below example, we store our module in a variable for potential use in other parts of our application. If you are familiar with Ruby, you can see how the code below resembles a Class.</p>
+
+<h2>Module Export Pattern</h2>
+
+
+
+
+<div><script src='https://gist.github.com/d87b7ac5f9a2e20578d8.js?file=dog_module.js'></script>
+<noscript><pre><code>var DogModule = (function(){
+  var dog = {};
+  dog.sayWoof = function(){
+    console.log(&quot;Woof!&quot;);
+  }
+  
+  return dog;
+}())</code></pre></noscript></div>
+
+
+<p>Again, we get the benefit of protecting our code from the global scope through the use of a closure (and allowing us to use any variable names we want locally), but we are able to reuse it through the DogModule variable across our application.</p>
+
+<h2>Module Import Pattern</h2>
+
+
+<p>Similarly, we can import a module and extend its functionality through the module import pattern. To do this, we pass the module along as an argument to a function that has a <b>parameter</b>defined. Typically, the argument and and parameter are named differently to highlight that the module is going to be changed or extended somehow, but it&rsquo;s not necessary. The module is stored in the local scope thanks to the parameter, giving a small performance boost.</p>
+
+<div><script src='https://gist.github.com/bdd49515d56f1070bf97.js?file=underscore_module.js'></script>
+<noscript><pre><code>!function(underscore){
+  underscore.cool = function() {
+    console.log(&quot;cool!&quot;);
+  }
+  
+  return underscore;
+}(_);</code></pre></noscript></div>
+
+
+
+
+<h2>Module Export Pattern w/Loose Augmentation</h2>
+
+
+<p>One downside with this pattern so far is that our entire module must be contained in one file. However, we can use the addition of the loose augmentation pattern to free us from this constraint. The way this pattern works is it imports your module (see module import pattern above) if it has already been defined and &ldquo;augments&rdquo; it, otherwise, if it is the first file to be imported, it uses a new object to define the module.</p>
+
+<div><script src='https://gist.github.com/8803b50df66b3442fd72.js?file=loose_dog_module.js'></script>
+<noscript><pre><code>var DogModule = (function(DogModule){
+  var dog = DogModule;
+  dog.fetch = function(item){
+    console.log(&quot;Chases after &quot; + item);
+  }
+  
+  return dog;
+}(DogModule || {})</code></pre></noscript></div>
+
+
+
+
+<h3>TLDR?</h3>
+
+
+<ul>
+  <li>The module pattern makes sure your code doesn't interfere with the global scope.</li>
+  <li>It allows you to extend the functionality of other modules.</li>
+  <li>It's a powerful way of organizing your code.</li>
+</ul>
+
+
+
+
+<p>Sources</p>
+
+
+<p><a href="http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html"><a href="http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html">http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html</a></a><br>
+<a href="http://toddmotto.com/mastering-the-module-pattern/"><a href="http://toddmotto.com/mastering-the-module-pattern/">http://toddmotto.com/mastering-the-module-pattern/</a></a><br>
+<a href="https://teamtreehouse.com/library/the-module-pattern-in-javascript-2"><a href="https://teamtreehouse.com/library/the-module-pattern-in-javascript-2">https://teamtreehouse.com/library/the-module-pattern-in-javascript-2</a></a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Airport Runway Problem: A Look at Binary Trees and Big O]]></title>
