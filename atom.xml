@@ -4,7 +4,7 @@
   <title><![CDATA[Lia.Skalkos]]></title>
   <link href="http://lskalkos.github.io/atom.xml" rel="self"/>
   <link href="http://lskalkos.github.io/"/>
-  <updated>2015-09-29T14:38:56-04:00</updated>
+  <updated>2015-09-29T14:40:44-04:00</updated>
   <id>http://lskalkos.github.io/</id>
   <author>
     <name><![CDATA[Lia Skalkos]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Introducing the Javascript Module Pattern]]></title>
-    <link href="http://lskalkos.github.io/blog/2015/09/22/adding-elasticsearch-to-your-rails-project/"/>
-    <updated>2015-09-22T16:58:02-04:00</updated>
-    <id>http://lskalkos.github.io/blog/2015/09/22/adding-elasticsearch-to-your-rails-project</id>
+    <title type="html"><![CDATA[Introducing the JavaScript Module Pattern]]></title>
+    <link href="http://lskalkos.github.io/blog/2015/09/29/introducing-the-javascript-module-pattern/"/>
+    <updated>2015-09-29T14:40:07-04:00</updated>
+    <id>http://lskalkos.github.io/blog/2015/09/29/introducing-the-javascript-module-pattern</id>
     <content type="html"><![CDATA[<p><img src="https://media.giphy.com/media/vyGU7aL3vgl7G/giphy.gif" alt="" style="display: block; margin: 0 auto;"></p>
 
 <p>Some time ago, in a job far far away (not that far away), I saw some JavaScript code that looked like this:</p>
